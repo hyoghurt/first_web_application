@@ -26,7 +26,8 @@ public class SignIn extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         session.invalidate();
-        req.getRequestDispatcher("/signin.jsp").forward(req, resp);
+        resp.setContentType("text/html");
+        req.getRequestDispatcher("/WEB-INF/jsp/signIn.jsp").forward(req, resp);
     }
 
     @Override
@@ -36,14 +37,14 @@ public class SignIn extends HttpServlet {
         user.setPassword(req.getParameter("password"));
 
         HttpSession session = req.getSession();
-
         User findUser = userService.signIn(user);
 
         if (findUser == null) {
-            resp.sendRedirect("/signin");
+            resp.sendRedirect("signin");
         } else {
             session.setAttribute("user", findUser);
-            resp.sendRedirect("/profile");
+            req.setAttribute("user", findUser);
+            req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req, resp);
         }
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -23,6 +23,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public int signUp(User user) {
+        if (userRepository.findUserByPhone(user.getPhone()) != null)
+            return 0;
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             return userRepository.saveUser(user);

@@ -5,6 +5,7 @@ import edu.school21.cinema.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -28,7 +29,9 @@ public class SignUp extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/signup.jsp").forward(req, resp);
+        resp.setContentType("text/html");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/jsp/signUp.jsp");
+        dispatcher.forward(req, resp);
     }
 
     @Override
