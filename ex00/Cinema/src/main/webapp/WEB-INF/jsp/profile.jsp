@@ -1,4 +1,4 @@
-<jsp:useBean id="user" scope="request" type="edu.school21.cinema.models.User"/>
+<jsp:useBean id="user" scope="session" type="edu.school21.cinema.models.User"/>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
