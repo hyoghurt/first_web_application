@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import javax.sql.DataSource;
 
 @ComponentScan("edu.school21.cinema")
-@PropertySource("classpath:application.properties")
+@PropertySource("file:${webapp.root}/WEB-INF/application.properties")
 public class MyConfiguration {
 
     @Value("${db.driver.name}")
