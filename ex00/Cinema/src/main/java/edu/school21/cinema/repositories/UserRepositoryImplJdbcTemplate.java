@@ -11,8 +11,8 @@ import javax.sql.DataSource;
 @Component
 public class UserRepositoryImplJdbcTemplate implements UserRepository {
     private final JdbcTemplate jdbcTemplate;
-    private final String INSERT = "INSERT INTO fwa.users(first_name, last_name, phone, password) VALUES (?, ?, ?, ?)";
-    private final String SELECT_BY_PHONE = "SELECT * FROM fwa.users WHERE phone = ?";
+    private final String INSERT = "INSERT INTO users(first_name, last_name, phone, password) VALUES (?, ?, ?, ?)";
+    private final String SELECT_BY_PHONE = "SELECT * FROM users WHERE phone = ?";
 
     @Autowired
     public UserRepositoryImplJdbcTemplate(DataSource dataSource) {
