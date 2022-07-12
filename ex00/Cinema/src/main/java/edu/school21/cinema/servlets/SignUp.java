@@ -45,9 +45,9 @@ public class SignUp extends HttpServlet {
         int status = userService.signUp(user);
 
         if (status == 1) {
-            resp.sendRedirect("/signin");
+            resp.sendRedirect("signin");
         } else {
-            resp.sendRedirect("/signup");
+            resp.sendRedirect("signup");
         }
     }
 }
