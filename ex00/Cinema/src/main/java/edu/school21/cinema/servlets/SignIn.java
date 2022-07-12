@@ -43,7 +43,7 @@ public class SignIn extends HttpServlet {
             resp.sendRedirect("signin");
         } else {
             session.setAttribute("user", findUser);
-            req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req, resp);
+            resp.sendRedirect("profile");
         }
     }
 }
