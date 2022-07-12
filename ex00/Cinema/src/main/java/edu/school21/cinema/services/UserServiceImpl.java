@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int signUp(User user) {
-        if (userRepository.findUserByPhone(user.getPhone()) != null)
-            return 0;
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             return userRepository.saveUser(user);
