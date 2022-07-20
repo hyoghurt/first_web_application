@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 @WebServlet(name = "signIn", value = "/signin")
 public class SignIn extends HttpServlet {
@@ -42,6 +43,13 @@ public class SignIn extends HttpServlet {
         if (findUser == null) {
             resp.sendRedirect("signin");
         } else {
+            edu.school21.cinema.models.SignIn signIn = new edu.school21.cinema.models.SignIn();
+            signIn.setIp(req.getRemoteAddr());
+            signIn.setPhoneUser(findUser.getPhone());
+            signIn.setDate(new Timestamp(System.currentTimeMillis()));
+
+            userService.saveSignIn(signIn);
+
             session.setAttribute("user", findUser);
             resp.sendRedirect("profile");
         }

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(value = {"/profile"})
+@WebFilter(value = {"/profile", "/images/*"})
 public class AuthFilter implements Filter {
     private UserService userService;
 
