@@ -10,6 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Part;
 import java.io.IOException;
@@ -52,23 +53,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User signIn(User user) {
-        User findUser = userRepository.findUserByPhone(user.getPhone());
-        if (findUser != null && passwordEncoder.matches(user.getPassword(), findUser.getPassword())) {
+    @Transactional
+    public User signIn(String phone, String password, SignIn signIn) {
+        User findUser = userRepository.findUserByPhone(phone);
+        if (findUser != null && passwordEncoder.matches(password, findUser.getPassword())) {
+            userRepository.saveSignIn(signIn);
             return findUser;
         }
         return null;
     }
 
     @Override
-    public Boolean auth(User user) {
+    public boolean auth(User user) {
         User findUser = userRepository.findUserByPhone(user.getPhone());
         return findUser != null && findUser.getPassword().equals(user.getPassword());
     }
 
     @Override
-    public int saveSignIn(SignIn signin) {
-        return userRepository.saveSignIn(signin);
+    public boolean authImages(String phone, UUID uuid) {
+        return userRepository.findImagesByPhoneByUuid(phone, uuid);
     }
 
     @Override
@@ -138,14 +141,15 @@ public class UserServiceImpl implements UserService {
         image.setMime(part.getContentType());
         image.setSize(part.getSize());
 
-        //TODO mutlithread
-
-        saveFileLocal(part, image.getId());
-        saveImage(image);
+        try {
+            saveFileLocal(part, image.getId());
+            saveImage(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void saveFileLocal(Part part, UUID uuid) {
+    private void saveFileLocal(Part part, UUID uuid) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(pathFileUpload);
         if (!pathFileUpload.endsWith("/")) {
@@ -153,25 +157,19 @@ public class UserServiceImpl implements UserService {
         }
         stringBuilder.append(uuid);
 
-        try {
-            Path path = Paths.get(stringBuilder.toString());
-            if (!path.getParent().toFile().exists()) {
-                Files.createDirectories(path.getParent());
-            }
-            part.write(stringBuilder.toString());
-            log.info("create file: " + stringBuilder);
-        } catch (IOException e) {
-            log.error("file no saveUser local: " + stringBuilder);
-            e.printStackTrace();
+        Path path = Paths.get(stringBuilder.toString());
+        if (!path.getParent().toFile().exists()) {
+            Files.createDirectories(path.getParent());
         }
+        part.write(stringBuilder.toString());
+        log.info("create file local - success: " + stringBuilder);
     }
 
-    @Override
-    public void saveImage(Image image) {
+    private void saveImage(Image image) {
         if (userRepository.saveImage(image) == 1) {
-            log.info("saveUser DB: " + image.getId());
+            log.info("save image db - success: " + image.getId());
         } else {
-            log.info("no saveUser DB: " + image.getId());
+            log.error("save image db - fail: " + image.getId());
         }
     }
 }

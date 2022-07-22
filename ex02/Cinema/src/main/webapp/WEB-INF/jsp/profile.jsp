@@ -42,7 +42,7 @@
         </div>
 
         <div id="form" class="container">
-            <img src="/images/<%=ava%>" alt="no image">
+            <img src="${pageContext.request.contextPath}/images/<%=ava%>" alt="no image">
             <form method="post" action="images" enctype="multipart/form-data">
                 <input type="file" id="file" name="file" accept="image/*">
                 <button>Upload</button>
@@ -82,7 +82,7 @@
                 <tbody>
                 <c:forEach var="item" items="<%=list_images%>">
                     <tr>
-                        <td><a href="images/${item.id}" target="_blank">${item.name}</a></td>
+                        <td><a href="${pageContext.request.contextPath}/images/${item.id}" target="_blank">${item.name}</a></td>
                         <td>${item.size}</td>
                         <td>${item.mime}</td>
                     </tr>

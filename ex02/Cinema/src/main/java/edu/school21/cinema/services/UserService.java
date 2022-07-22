@@ -7,17 +7,14 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-
     int signUp(User user);
+    User signIn(String phone, String password, SignIn signIn);
 
-    User signIn(User user);
-    int saveSignIn(SignIn signin);
-    Boolean auth(User user);
+    boolean auth(User user);
+    boolean authImages(String phone, UUID uuid);
 
     List<SignInDTO> getListSignInDTO(String phone);
     List<ImageDTO> getListImages(String phone);
     byte[] getImageById(String id);
     void saveFile(Part part, String phone);
-    void saveFileLocal(Part part, UUID uuid);
-    void saveImage(Image image);
 }

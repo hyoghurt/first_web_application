@@ -33,23 +33,20 @@ public class SignIn extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = new User();
-        user.setPhone(req.getParameter("phone"));
-        user.setPassword(req.getParameter("password"));
+        String phone = req.getParameter("phone");
+        String password = req.getParameter("password");
 
-        HttpSession session = req.getSession();
-        User findUser = userService.signIn(user);
+        edu.school21.cinema.models.SignIn signIn = new edu.school21.cinema.models.SignIn();
+        signIn.setIp(req.getRemoteAddr());
+        signIn.setPhoneUser(phone);
+        signIn.setDate(new Timestamp(System.currentTimeMillis()));
+
+        User findUser = userService.signIn(phone, password, signIn);
 
         if (findUser == null) {
             resp.sendRedirect("signin");
         } else {
-            edu.school21.cinema.models.SignIn signIn = new edu.school21.cinema.models.SignIn();
-            signIn.setIp(req.getRemoteAddr());
-            signIn.setPhoneUser(findUser.getPhone());
-            signIn.setDate(new Timestamp(System.currentTimeMillis()));
-
-            userService.saveSignIn(signIn);
-
+            HttpSession session = req.getSession();
             session.setAttribute("user", findUser);
             resp.sendRedirect("profile");
         }

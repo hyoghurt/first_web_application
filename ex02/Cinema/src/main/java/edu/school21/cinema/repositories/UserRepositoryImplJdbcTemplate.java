@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class UserRepositoryImplJdbcTemplate implements UserRepository {
@@ -89,5 +90,11 @@ public class UserRepositoryImplJdbcTemplate implements UserRepository {
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public boolean findImagesByPhoneByUuid(String phone, UUID uuid) {
+        String QUERY = "SELECT COUNT(*) FROM images WHERE phone_user = ? AND id = ?";
+        return jdbcTemplate.queryForObject(QUERY, Integer.class, phone, uuid) == 1;
     }
 }

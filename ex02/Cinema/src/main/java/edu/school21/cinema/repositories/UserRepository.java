@@ -5,6 +5,7 @@ import edu.school21.cinema.models.SignIn;
 import edu.school21.cinema.models.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserRepository {
     int saveUser(User user);
@@ -13,4 +14,5 @@ public interface UserRepository {
     User findUserByPhone(String phone);
     List<SignIn> findAllSignInByPhoneUser(String phone);
     List<Image> findAllImagesByPhoneUser(String phone);
+    boolean findImagesByPhoneByUuid(String phone, UUID uuid);
 }

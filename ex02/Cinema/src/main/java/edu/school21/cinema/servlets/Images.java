@@ -41,18 +41,22 @@ public class Images extends HttpServlet {
 
         } catch (IllegalStateException e) {
         } finally {
-            resp.sendRedirect("/profile");
+            resp.sendRedirect("profile");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String[] split = req.getRequestURI().split("/");
+        int len = 3;
+        if (split.length > 1 && split[1].equals("cinema")) {
+            len = 4;
+        }
 
-        if (split.length != 3) {
+        if (split.length != len) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            byte[] imageById = userService.getImageById(split[2]);
+            byte[] imageById = userService.getImageById(split[len - 1]);
 
             if (imageById == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
